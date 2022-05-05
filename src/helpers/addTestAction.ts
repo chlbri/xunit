@@ -106,7 +106,6 @@ const AddTestActionMachine = createFunction(
         ctx.on = on;
         ctx.after = after;
         ctx.always = always;
-        console.log('assignContext', ctx);
       },
       removeAlways: ctx => {
         ctx.always = undefined;
@@ -149,5 +148,8 @@ const AddTestActionMachine = createFunction(
   },
 );
 
-export const addTestAction = (args: Config) =>
-  serve(AddTestActionMachine)(args);
+export const addTestAction = serve(AddTestActionMachine.clone);
+
+console.log('1', addTestAction({ always: 'target1', key: 'key1' }));
+console.log('2', addTestAction({ always: 'target2', key: 'key2' }));
+console.log('3', addTestAction({ always: { target: 'target3' } }));

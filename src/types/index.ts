@@ -15,6 +15,8 @@ export type Config = {
   always?: SingleOrArray<Transition | string>;
 };
 
+export type DeepConfig = Config & { states?: Config };
+
 export type History<T> = {
   currentState: string;
   currentContext: T;
