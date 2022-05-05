@@ -148,7 +148,7 @@ const AddTestActionMachine = createFunction(
   },
 );
 
-export const addTestAction = serve(AddTestActionMachine.clone);
+export const addTestAction = serve(AddTestActionMachine);
 
 console.log('1', addTestAction({ always: 'target1', key: 'key1' }));
 console.log('2', addTestAction({ always: 'target2', key: 'key2' }));

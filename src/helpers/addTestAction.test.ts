@@ -3,7 +3,7 @@ import { addTestAction } from './addTestAction';
 import { testAction } from './testAction';
 
 describe('Always', () => {
-  ttest({
+  ttest.concurrent({
     func: addTestAction,
     tests: [
       {
@@ -52,7 +52,7 @@ describe('Always', () => {
 });
 
 describe('On', () => {
-  ttest({
+  ttest.concurrent({
     func: addTestAction,
     tests: [
       {
@@ -93,7 +93,7 @@ describe('On', () => {
 });
 
 describe('After', () => {
-  ttest({
+  ttest.concurrent({
     func: addTestAction,
     tests: [
       {

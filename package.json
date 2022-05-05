@@ -43,7 +43,7 @@
   },
   "repository": "https://github.com/chlbri/xunit.git",
   "dependencies": {
-    "@bemedev/fsf": "^0.1.6",
+    "@bemedev/fsf": "^0.1.8",
     "@bemedev/types": "^0.0.3",
     "@xstate/immer": "^0.3.1",
     "immer": "^9.0.12"
