@@ -1,5 +1,5 @@
 import { shallowCompare, ttest } from '@bemedev/test';
-import { DeepConfig } from '../types';
+import { DeepConfig } from '../../types';
 import { generateIds } from './generateIds';
 
 const config1: DeepConfig = {

@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createFunction, FINAL_TARGET, serve } from '@bemedev/fsf';
 import { NOmit } from '@bemedev/types';
-import { Config } from '../types';
+import { Config, DeepConfig } from '../../types';
 import {
   createTestActionForAfter,
   createTestActionForAlways,
   createTestActionForOn,
-} from './Eventsmap';
+} from '../eventsMap';
 
 const AddTestActionMachine = createFunction(
   {
@@ -17,7 +17,7 @@ const AddTestActionMachine = createFunction(
     },
     schema: {
       args: {} as Config,
-      data: {} as Config,
+      data: {} as DeepConfig,
       context: {} as NOmit<Config, 'id'> & {
         _temp?: NOmit<Config, 'id'>;
       },

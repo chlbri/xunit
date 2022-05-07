@@ -1,6 +1,6 @@
 import { Action, EventObject } from 'xstate';
-import { ITestContext, Transition } from '../types';
-import { isString } from './types';
+import { ITestContext, Transition } from '../../types';
+import { isString } from '../types';
 
 export function addActions(
   action: Action<ITestContext, EventObject>,

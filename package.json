@@ -1,11 +1,24 @@
 {
   "name": "@bemedev/xunit",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "Unit tests for XState",
   "author": "chlbri <bri_lvi@icloud.com>",
   "license": "MIT",
   "main": "index.js",
   "types": "index.d.ts",
+  "keywords": [
+    "xstate",
+    "xstatejs",
+    "unit",
+    "jest",
+    "test",
+    "unit testing",
+    "state machine",
+    "fsm",
+    "finite state machine",
+    "statechart",
+    "clean architecture"
+  ],
   "scripts": {
     "tsc": "tsc",
     "tsc-w": "tsc -w",
@@ -54,6 +67,7 @@
     "immer": "^9.0.12"
   },
   "peerDependencies": {
+    "jest": "^28.0.3",
     "xstate": "^4.31.0"
   }
 }

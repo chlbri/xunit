@@ -1,6 +1,6 @@
 import { ttest } from '@bemedev/test';
 import { addEntryAction } from './addEntryAction';
-import { testAction } from './testAction';
+import { testAction } from '../testAction';
 describe('Entry action', () => {
   ttest({
     func: addEntryAction,

@@ -1,6 +1,6 @@
 import { dataCompare, shallowCompare, ttest } from '@bemedev/test';
 import { addTestAction } from './addTestAction';
-import { testAction } from './testAction';
+import { testAction } from '../testAction';
 
 describe('Always', () => {
   ttest.concurrent({

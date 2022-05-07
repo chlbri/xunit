@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createFunction, FINAL_TARGET, serve } from '@bemedev/fsf';
-import { EntryConfig } from '../types';
-import { testAction } from './testAction';
-import { isArray } from './types';
+import { EntryConfig } from '../../types';
+import { testAction } from '../testAction';
+import { isArray } from '../types';
 
 const machine = createFunction(
   {
@@ -60,6 +60,9 @@ const machine = createFunction(
       },
       buildEntry(context, args) {
         context.entry = [testAction(args.id ?? 'unknown')];
+        // if (!isParallel(args)) {
+        // context.entry.push(testAction(args.id ?? 'unknown'));
+        // }
       },
       computeArray(context, args) {
         context.entry.unshift(...args.entry);

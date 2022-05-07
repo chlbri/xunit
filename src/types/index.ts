@@ -1,13 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Action,
+  BaseActionObject,
   BaseActions,
-  createMachine,
+  Event,
   EventObject,
-  StateNode,
+  NoInfer,
+  ResolveTypegenMeta,
+  ServiceMap,
+  StateMachine,
+  StateSchema,
+  TypegenDisabled,
+  Typestate,
 } from 'xstate';
-import { addRecursiveTestAction } from '../addRecursiveTestAction';
 import { TESTS_KEY } from '../constants';
-import { hasChildrenStates } from '../helpers/hasChildrenStates';
 
 export type SingleOrArray<T> = T | T[];
 
@@ -23,13 +29,22 @@ export type Config = {
   always?: SingleOrArray<Transition | string>;
 };
 
+export type StateType =
+  | 'atomic'
+  | 'compound'
+  | 'parallel'
+  | 'final'
+  | 'history';
+
 export type EntryConfig = {
   id?: string;
+  type?: StateType;
   entry?: BaseActions<any, any, any>;
 };
 
 export type DeepConfig = Config &
   EntryConfig & {
+    initial?: string;
     states?: Record<string, DeepConfig>;
   };
 
@@ -43,58 +58,27 @@ export type ITestContext<T = any> = T & {
   [TESTS_KEY]?: History<T>[];
 };
 
-const machine = createMachine({
-  states: {
-    idle: {
-      on: {
-        START: 'on',
-      },
-    },
-    on: {
-      on: {
-        TOGGLE: 'off',
-      },
-    },
-    off: {
-      on: {
-        TOGGLE: 'on',
-      },
-      states: {
-        state1: {},
-      },
-    },
-  },
-});
-
-type ConcatProps = {
-  text: string;
-  separator?: string;
-  args?: (string | undefined)[];
+export type Waiter<TE extends EventObject> = {
+  wait?: number;
+  event: Event<TE>;
 };
 
-function concat({ text, separator = '.', args = [] }: ConcatProps) {
-  return [text, ...args]
-    .filter(t => !!t)
-    .reduce((acc, curr) => `${acc}${separator}${curr}`) as string;
-}
+export type TestsProps<
+  TC,
+  TE extends EventObject,
+  TA extends BaseActionObject = BaseActionObject,
+  TS extends ServiceMap = ServiceMap,
+  TR = ResolveTypegenMeta<TypegenDisabled, NoInfer<TE>, TA, TS>,
+  ASYNC extends boolean | undefined = undefined,
+> = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  machine: StateMachine<TC, StateSchema, TE, Typestate<TC>, TA, TS, TR>;
+  events?: (ASYNC extends undefined | false ? Event<TE> : Waiter<TE>)[];
+  async?: ASYNC;
+  useFakeTimers?: boolean;
+};
 
-function mapperT(stateNode: StateNode) {
-  const out: string[] = [];
-  out.push(stateNode.id);
-  if (hasChildrenStates(stateNode)) {
-    const states = Object.values(stateNode.states);
-    states.forEach(s1 => {
-      out.push(...mapperT(s1));
-    });
-  }
-  return out;
-}
-
-const values = mapperT(machine.machine);
-
-machine.config;
-addRecursiveTestAction(machine.config as any);
-
-const config = machine.config;
-
-const val = concat({ text: 'one', separator: 'two', args: ['three'] });
+export type ParallelsWithChildren = {
+  id?: string;
+  grandChildren?: string[];
+};
