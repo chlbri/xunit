@@ -1,13 +1,6 @@
-import {
-  Action,
-  BaseActions,
-  createMachine,
-  EventObject,
-  StateNode,
-} from 'xstate';
-import { addRecursiveTestAction } from '../addRecursiveTestAction';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Action, BaseActions, EventObject } from 'xstate';
 import { TESTS_KEY } from '../constants';
-import { hasChildrenStates } from '../helpers/hasChildrenStates';
 
 export type SingleOrArray<T> = T | T[];
 
@@ -42,59 +35,3 @@ export type History<T> = {
 export type ITestContext<T = any> = T & {
   [TESTS_KEY]?: History<T>[];
 };
-
-const machine = createMachine({
-  states: {
-    idle: {
-      on: {
-        START: 'on',
-      },
-    },
-    on: {
-      on: {
-        TOGGLE: 'off',
-      },
-    },
-    off: {
-      on: {
-        TOGGLE: 'on',
-      },
-      states: {
-        state1: {},
-      },
-    },
-  },
-});
-
-type ConcatProps = {
-  text: string;
-  separator?: string;
-  args?: (string | undefined)[];
-};
-
-function concat({ text, separator = '.', args = [] }: ConcatProps) {
-  return [text, ...args]
-    .filter(t => !!t)
-    .reduce((acc, curr) => `${acc}${separator}${curr}`) as string;
-}
-
-function mapperT(stateNode: StateNode) {
-  const out: string[] = [];
-  out.push(stateNode.id);
-  if (hasChildrenStates(stateNode)) {
-    const states = Object.values(stateNode.states);
-    states.forEach(s1 => {
-      out.push(...mapperT(s1));
-    });
-  }
-  return out;
-}
-
-const values = mapperT(machine.machine);
-
-machine.config;
-addRecursiveTestAction(machine.config as any);
-
-const config = machine.config;
-
-const val = concat({ text: 'one', separator: 'two', args: ['three'] });
