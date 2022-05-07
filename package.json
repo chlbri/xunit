@@ -67,6 +67,7 @@
     "immer": "^9.0.12"
   },
   "peerDependencies": {
+    "jest": "^28.0.3",
     "xstate": "^4.31.0"
   }
 }
