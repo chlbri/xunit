@@ -1,0 +1,150 @@
+{
+  "id": "(machine)",
+  "key": "(machine)",
+  "type": "compound",
+  "initial": "idle",
+  "history": false,
+  "states": {
+    "idle": {
+      "id": "(machine).idle",
+      "key": "idle",
+      "type": "atomic",
+      "history": false,
+      "states": {},
+      "on": {
+        "START": [
+          {
+            "target": [
+              "#(machine).on"
+            ],
+            "event": "START",
+            "actions": [],
+            "source": "#(machine).idle",
+            "internal": false,
+            "eventType": "START"
+          }
+        ]
+      },
+      "transitions": [
+        {
+          "target": [
+            "#(machine).on"
+          ],
+          "event": "START",
+          "actions": [],
+          "source": "#(machine).idle",
+          "internal": false,
+          "eventType": "START"
+        }
+      ],
+      "entry": [],
+      "exit": [],
+      "activities": [],
+      "order": 1,
+      "invoke": [],
+      "tags": []
+    },
+    "on": {
+      "id": "(machine).on",
+      "key": "on",
+      "type": "atomic",
+      "history": false,
+      "states": {},
+      "on": {
+        "TOGGLE": [
+          {
+            "target": [
+              "#(machine).off"
+            ],
+            "event": "TOGGLE",
+            "actions": [],
+            "source": "#(machine).on",
+            "internal": false,
+            "eventType": "TOGGLE"
+          }
+        ]
+      },
+      "transitions": [
+        {
+          "target": [
+            "#(machine).off"
+          ],
+          "event": "TOGGLE",
+          "actions": [],
+          "source": "#(machine).on",
+          "internal": false,
+          "eventType": "TOGGLE"
+        }
+      ],
+      "entry": [],
+      "exit": [],
+      "activities": [],
+      "order": 2,
+      "invoke": [],
+      "tags": []
+    },
+    "off": {
+      "id": "(machine).off",
+      "key": "off",
+      "type": "compound",
+      "history": false,
+      "states": {
+        "state1": {
+          "id": "(machine).off.state1",
+          "key": "state1",
+          "type": "atomic",
+          "history": false,
+          "states": {},
+          "on": {},
+          "transitions": [],
+          "entry": [],
+          "exit": [],
+          "activities": [],
+          "order": 4,
+          "invoke": [],
+          "tags": []
+        }
+      },
+      "on": {
+        "TOGGLE": [
+          {
+            "target": [
+              "#(machine).on"
+            ],
+            "event": "TOGGLE",
+            "actions": [],
+            "source": "#(machine).off",
+            "internal": false,
+            "eventType": "TOGGLE"
+          }
+        ]
+      },
+      "transitions": [
+        {
+          "target": [
+            "#(machine).on"
+          ],
+          "event": "TOGGLE",
+          "actions": [],
+          "source": "#(machine).off",
+          "internal": false,
+          "eventType": "TOGGLE"
+        }
+      ],
+      "entry": [],
+      "exit": [],
+      "activities": [],
+      "order": 3,
+      "invoke": [],
+      "tags": []
+    }
+  },
+  "on": {},
+  "transitions": [],
+  "entry": [],
+  "exit": [],
+  "activities": [],
+  "order": -1,
+  "invoke": [],
+  "tags": []
+}

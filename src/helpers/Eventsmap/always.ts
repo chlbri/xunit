@@ -1,32 +1,19 @@
 import { NExclude } from '@bemedev/types';
 import { SingleOrArray } from 'xstate';
 import { Config, Transition } from '../../types';
-import { addActions } from '../addActions';
-import { testAction } from '../testAction';
 import { isString } from '../types';
 import { isTransition } from '../types/isTransition';
+import { reducerTarget } from './reducer';
 
 export function createTestActionForAlways(
   always: NExclude<Config['always'], undefined>,
-  key: string,
-): SingleOrArray<Transition> {
-  const _action = testAction(key);
+  id: string,
+): SingleOrArray<Transition | string> {
   if (isString(always)) {
-    return {
-      target: always,
-      actions: addActions(_action),
-    };
+    return always;
   }
   if (isTransition(always)) {
-    const _actions = always.actions;
-    const actions = addActions(_action, _actions);
-
-    return {
-      target: always.target,
-      actions,
-    };
+    return reducerTarget(always, id);
   }
-  return always?.map(t =>
-    createTestActionForAlways(t, key),
-  ) as Transition[];
+  return always.map(t => createTestActionForAlways(t, id)) as Transition[];
 }

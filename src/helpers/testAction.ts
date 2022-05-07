@@ -1,14 +1,19 @@
 import { assign } from '@xstate/immer';
-import { IContext } from '../types';
+import { TESTS_KEY } from '../constants';
+import { ITestContext } from '../types';
 
-export function testAction(key?: string) {
-  return assign((ctx: IContext) => {
+export function testAction(key: string) {
+  return assign((ctx: ITestContext) => {
+    TESTS_KEY;
+    const _ctx = { ...ctx };
+    delete _ctx[TESTS_KEY];
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { __tests__, ...rest } = ctx;
-    if (!ctx.__tests__) ctx.__tests__ = [];
-    ctx.__tests__.push({
+    if (!ctx[TESTS_KEY]) {
+      ctx[TESTS_KEY] = [];
+    }
+    ctx[TESTS_KEY]?.push({
       currentState: key ?? 'unknown',
-      currentContext: rest,
+      currentContext: _ctx,
     });
   });
 }
