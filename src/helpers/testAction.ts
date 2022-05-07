@@ -12,7 +12,7 @@ export function testAction(key: string) {
       ctx[TESTS_KEY] = [];
     }
     ctx[TESTS_KEY]?.push({
-      currentState: key ?? 'unknown',
+      currentState: key,
       currentContext: _ctx,
     });
   });

@@ -39,7 +39,7 @@ export type History<T> = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ITestContext<T = any> = {
+export type ITestContext<T = any> = T & {
   [TESTS_KEY]?: History<T>[];
 };
 
