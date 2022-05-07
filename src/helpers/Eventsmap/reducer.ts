@@ -1,5 +1,5 @@
 import { Transition } from '../../types';
-import { addActions } from '../addActions';
+import { addActions } from '../actions';
 import { testAction } from '../testAction';
 
 export function reducerTarget(transition: Transition, id: string) {

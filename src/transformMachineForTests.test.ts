@@ -1,41 +1,34 @@
-import { createMachine } from 'xstate';
+import { createMachine, interpret } from 'xstate';
 import { TESTS_KEY } from './constants';
 import { transformMachineForTests } from './transformMachineForTests';
 import { ITestContext } from './types';
 
-const _machine1 = createMachine({
-  initial: 'idle',
-  states: {
-    idle: {
+describe('Machine 1 : simple', () => {
+  const _machine1 = createMachine({
+    initial: 'idle',
+    states: {
+      idle: {
+        on: {
+          START: 'on',
+        },
+      },
       on: {
-        START: 'on',
+        on: {
+          TOGGLE: 'off',
+        },
+      },
+      off: {
+        on: {
+          TOGGLE: 'on',
+        },
+        states: {
+          state1: {},
+        },
       },
     },
-    on: {
-      on: {
-        TOGGLE: 'off',
-      },
-    },
-    off: {
-      on: {
-        TOGGLE: 'on',
-      },
-      states: {
-        state1: {},
-      },
-    },
-  },
-});
-
-const machine = transformMachineForTests(_machine1);
-
-describe('Existence', () => {
-  it('should be defined', () => {
-    expect(machine).toBeDefined();
   });
-});
 
-describe('Working', () => {
+  const { machine } = transformMachineForTests(_machine1);
   describe('Case => One Event', () => {
     let tests: ITestContext[typeof TESTS_KEY] = undefined;
     beforeAll(() => {
@@ -47,16 +40,10 @@ describe('Working', () => {
       expect(tests).toBeDefined();
     });
     it("Tests can't be empty", () => {
-      expect(tests).toHaveLength(3);
+      expect(tests).toHaveLength(2);
     });
     it('Tests the value', () => {
-      // console.log('config =>', JSON.stringify(machine.config, null, 2));
-
       expect(tests).toContainAllValues([
-        {
-          currentState: '(machine)',
-          currentContext: {},
-        },
         {
           currentState: '(machine).idle',
           currentContext: {},
@@ -66,6 +53,88 @@ describe('Working', () => {
           currentContext: {},
         },
       ]);
+    });
+  });
+});
+
+describe('Machine 2 : parallel', () => {
+  const _machine2 = createMachine({
+    initial: 'idle',
+    states: {
+      idle: {
+        on: {
+          START: 'on',
+        },
+      },
+      on: {
+        on: {
+          TOGGLE: 'off',
+        },
+      },
+      off: {
+        on: {
+          TOGGLE: 'on',
+        },
+        type: 'parallel',
+        states: {
+          state1: {
+            // on: {
+            //   TOGGLE2: 'state2',
+            // },
+          },
+          state2: {
+            // on: {
+            //   TOGGLE2: 'state3',
+            // },
+          },
+          state3: {
+            // on: {
+            //   TOGGLE2: 'state4',
+            // },
+            on: {
+              TOGGLE3: '.state3b',
+            },
+            initial: 'state3a',
+            states: {
+              state3a: {},
+              state3b: {},
+            },
+          },
+          state4: {
+            initial: 'state4a',
+            states: {
+              state4a: {
+                on: {
+                  TOGGLE2: 'state4b',
+                },
+              },
+              state4b: {
+                on: {
+                  TOGGLE2: 'state4a',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const { machine } = transformMachineForTests(_machine2);
+
+  describe('Case => Multiples Events', () => {
+    let tests: ITestContext[typeof TESTS_KEY] = undefined;
+    beforeAll(() => {
+      const interpreter = interpret(machine).start();
+      interpreter.send(['START', 'TOGGLE', 'TOGGLE2', 'TOGGLE2']);
+
+      tests = interpreter.state.context[TESTS_KEY];
+    });
+    it('Tests must be defined', () => {
+      expect(tests).toBeDefined();
+    });
+    it("Tests can't be empty", () => {
+      expect(tests).not.toBeEmpty();
     });
   });
 });

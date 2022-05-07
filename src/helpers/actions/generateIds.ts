@@ -1,5 +1,5 @@
-import { DeepConfig } from '../types';
-import { hasChildrenStates } from './hasChildrenStates';
+import { DeepConfig } from '../../types';
+import { hasChildrenStates } from '../checkers';
 
 type ConcatProps = {
   text: string;
@@ -7,7 +7,11 @@ type ConcatProps = {
   args?: (string | undefined)[];
 };
 
-function concat({ text, separator = '.', args = [] }: ConcatProps) {
+export function concatId({
+  text,
+  separator = '.',
+  args = [],
+}: ConcatProps) {
   return [text, ...args]
     .filter(t => !!t)
     .reduce((acc, curr) => `${acc}${separator}${curr}`) as string;
@@ -23,7 +27,7 @@ function _generateIds(
   if (first) {
     if (!_config.id) _config.id = '(machine)';
   } else {
-    _config.id = concat({ text, args });
+    _config.id = concatId({ text, args });
   }
   if (hasChildrenStates(config)) {
     const children = Object.entries(config.states)

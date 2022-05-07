@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NFunction, shallowCompare, ttest } from '@bemedev/test';
 import { addRecursiveTestAction } from './addRecursiveTestAction';
-import { testAction } from './helpers/testAction';
+import { testAction } from './helpers';
 import { DeepConfig } from './types';
 
 describe('Complex tests', () => {
@@ -11,7 +11,6 @@ describe('Complex tests', () => {
       {
         invite: '#1',
         expected: {
-          entry: [testAction('')],
           states: {
             state1: { always: 'state2', entry: [testAction('')] },
             state2: { on: { GO: 'state1' }, entry: [testAction('')] },
@@ -40,7 +39,6 @@ describe('Complex tests', () => {
               entry: [testAction('')],
             },
           },
-          entry: [testAction('')],
         },
       },
       {

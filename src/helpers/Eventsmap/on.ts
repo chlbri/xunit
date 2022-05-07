@@ -1,7 +1,6 @@
 import { NExclude } from '@bemedev/types';
 import { Config } from '../../types';
-import { isString } from '../types';
-import { isTransition } from '../types/isTransition';
+import { isString, isTransition } from '../types';
 import { reducerTarget } from './reducer';
 
 export function createTestActionForOn(
