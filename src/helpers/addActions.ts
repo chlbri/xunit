@@ -1,9 +1,9 @@
 import { Action, EventObject } from 'xstate';
-import { IContext, Transition } from '../types';
+import { ITestContext, Transition } from '../types';
 import { isString } from './types';
 
 export function addActions(
-  action: Action<IContext, EventObject>,
+  action: Action<ITestContext, EventObject>,
   actions?: Transition['actions'],
 ) {
   if (isString(actions)) {

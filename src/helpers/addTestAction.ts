@@ -1,9 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  createMachine as createFunction,
-  FINAL_TARGET,
-  serve,
-} from '@bemedev/fsf';
+import { createFunction, FINAL_TARGET, serve } from '@bemedev/fsf';
 import { NOmit } from '@bemedev/types';
 import { Config } from '../types';
 import {
@@ -19,11 +15,11 @@ const AddTestActionMachine = createFunction(
       on: undefined,
       after: undefined,
     },
-    tsTypes: {
+    schema: {
       args: {} as Config,
       data: {} as Config,
-      context: {} as NOmit<Config, 'id' | 'key'> & {
-        _temp?: NOmit<Config, 'id' | 'key'>;
+      context: {} as NOmit<Config, 'id'> & {
+        _temp?: NOmit<Config, 'id'>;
       },
     },
     initial: 'idle',
@@ -106,7 +102,6 @@ const AddTestActionMachine = createFunction(
         ctx.on = on;
         ctx.after = after;
         ctx.always = always;
-        console.log('assignContext', ctx);
       },
       removeAlways: ctx => {
         ctx.always = undefined;
@@ -122,20 +117,23 @@ const AddTestActionMachine = createFunction(
           ...ctx._temp,
           always: createTestActionForAlways(
             ctx.always ?? 'unknown',
-            ev.key,
+            ev.id ?? 'unknown',
           ),
         };
       },
       addTestActionForOn: (ctx, ev) => {
         ctx._temp = {
           ...ctx._temp,
-          on: createTestActionForOn(ctx.on ?? {}, ev.key),
+          on: createTestActionForOn(ctx.on ?? {}, ev.id ?? 'unknown'),
         };
       },
       addTestActionForAfter: (ctx, ev) => {
         ctx._temp = {
           ...ctx._temp,
-          after: createTestActionForAfter(ctx.after ?? {}, ev.key),
+          after: createTestActionForAfter(
+            ctx.after ?? {},
+            ev.id ?? 'unknown',
+          ),
         };
       },
     },
@@ -149,5 +147,4 @@ const AddTestActionMachine = createFunction(
   },
 );
 
-export const addTestAction = (args: Config) =>
-  serve(AddTestActionMachine)(args);
+export const addTestAction = serve(AddTestActionMachine);

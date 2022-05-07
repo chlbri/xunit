@@ -3,27 +3,21 @@ import { addTestAction } from './addTestAction';
 import { testAction } from './testAction';
 
 describe('Always', () => {
-  ttest({
+  ttest.concurrent({
     func: addTestAction,
     tests: [
       {
         invite: '#1',
-        args: { always: 'target1', key: 'key1' },
+        args: { always: 'target1' },
         expected: {
-          always: {
-            target: 'target1',
-            actions: testAction(),
-          },
+          always: 'target1',
         },
       },
       {
         invite: '#2',
-        args: { always: 'target2', key: 'key2' },
+        args: { always: 'target2' },
         expected: {
-          always: {
-            target: 'target2',
-            actions: testAction('key2'),
-          },
+          always: 'target2',
         },
       },
       {
@@ -37,12 +31,32 @@ describe('Always', () => {
       },
       {
         invite: '#4',
-        args: { always: { target: 'target4', actions: 'action4' } },
+        args: { always: { actions: 'action4' } },
         expected: {
           always: {
-            target: 'target4',
-            actions: ['action4', testAction()],
+            actions: ['action4', testAction('key')],
           },
+        },
+        // compare: dataCompare,
+      },
+      {
+        invite: '#5',
+        args: {
+          always: [
+            { target: 'target4a', actions: 'action4a' },
+            { actions: 'action4b' },
+          ],
+        },
+        expected: {
+          always: [
+            {
+              target: 'target4a',
+              actions: 'action4a',
+            },
+            {
+              actions: ['action4b', testAction('key')],
+            },
+          ],
         },
         compare: dataCompare,
       },
@@ -52,7 +66,7 @@ describe('Always', () => {
 });
 
 describe('On', () => {
-  ttest({
+  ttest.concurrent({
     func: addTestAction,
     tests: [
       {
@@ -65,8 +79,8 @@ describe('On', () => {
         },
         expected: {
           on: {
-            DEBT: { target: 'debt', actions: testAction() },
-            CREDIT: { target: 'credit', actions: testAction() },
+            DEBT: 'debt',
+            CREDIT: 'credit',
           },
         },
       },
@@ -81,19 +95,60 @@ describe('On', () => {
           on: {
             CREDIT: {
               target: 'credit',
-              actions: ['action2', testAction()],
+              actions: 'action2',
             },
           },
         },
         compare: dataCompare,
       },
+      {
+        invite: '#3',
+        args: {
+          on: {
+            CREDIT: { actions: 'action2' },
+          },
+        },
+        expected: {
+          on: {
+            CREDIT: {
+              actions: ['action2', testAction('key')],
+            },
+          },
+        },
+        compare: dataCompare,
+      },
+      {
+        invite: '#4',
+        args: {
+          after: {
+            150: [
+              { target: 'target4a', actions: 'action4a' },
+              { actions: ['action4b', 'action4c'] },
+              'target4b',
+            ],
+          },
+        },
+        expected: {
+          after: {
+            150: [
+              {
+                target: 'target4a',
+                actions: 'action4a',
+              },
+              {
+                actions: ['action4b', 'action4c', testAction('key1')],
+              },
+              'target4b',
+            ],
+          },
+        },
+      },
     ],
-    compare: shallowCompare,
   });
 });
 
 describe('After', () => {
-  ttest({
+  ttest.concurrent({
     func: addTestAction,
     tests: [
       {
@@ -106,8 +161,8 @@ describe('After', () => {
         },
         expected: {
           after: {
-            time1: { target: 'debt', actions: testAction() },
-            time2: { target: 'credit', actions: testAction() },
+            time1: 'debt',
+            time2: 'credit',
           },
         },
       },
@@ -122,30 +177,58 @@ describe('After', () => {
           after: {
             CREDIT: {
               target: 'credit',
-              actions: ['action2', testAction()],
+              actions: 'action2',
             },
           },
         },
-        compare: dataCompare,
       },
       {
         invite: '#3',
         args: {
           after: {
             300: 'paypal',
+            400: {
+              actions: 'action3',
+            },
           },
         },
         expected: {
           after: {
-            300: {
-              target: 'paypal',
-              actions: testAction(),
+            300: 'paypal',
+            400: {
+              actions: ['action3', testAction('key')],
             },
           },
         },
         compare: dataCompare,
       },
+      {
+        invite: '#4',
+        args: {
+          on: {
+            GO: [
+              { target: 'target4a', actions: 'action4a' },
+              { actions: 'action4b' },
+              'target4b',
+            ],
+          },
+        },
+        expected: {
+          on: {
+            GO: [
+              {
+                target: 'target4a',
+                actions: 'action4a',
+              },
+              {
+                actions: ['action4b', testAction('key')],
+              },
+              'target4b',
+            ],
+          },
+        },
+        compare: dataCompare,
+      },
     ],
-    compare: shallowCompare,
   });
 });

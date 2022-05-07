@@ -14,4 +14,3 @@ const machine = createMachine({
   },
 });
 
-console.log('machine.config', JSON.stringify(machine.config, null, 2));
