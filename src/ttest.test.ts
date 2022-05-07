@@ -1,5 +1,5 @@
 import { createMachine } from 'xstate';
-import { testMachine } from './ttest';
+import { testMachine } from './testMachine';
 
 describe('TestMachine', () => {
   const machine = createMachine({

@@ -8,8 +8,8 @@ import {
   TypegenDisabled,
 } from 'xstate';
 import { DEFAULT_WAIT_BETWEEN_EVENT } from './constants';
-import { History, TestsProps, Waiter } from './types';
 import { useMachine } from './hooks/useMachine';
+import { History, TestsProps, Waiter } from './types';
 
 type Helpers<TC> = {
   containsStateIds?: string[];
