@@ -46,7 +46,6 @@ bower_components
 build
 out
 dist
-lib
 
 # Dependency directories
 node_modules/
