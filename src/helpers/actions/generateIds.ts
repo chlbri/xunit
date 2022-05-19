@@ -27,7 +27,7 @@ function _generateIds(
   if (first) {
     if (!_config.id) _config.id = '(machine)';
   } else {
-    _config.id = concatId({ text, args });
+    _config.id = _config.id ?? concatId({ text, args });
   }
   if (hasChildrenStates(config)) {
     const children = Object.entries(config.states)
