@@ -76,6 +76,8 @@ export type TestsProps<
   events?: (ASYNC extends undefined | false ? Event<TE> : Waiter<TE>)[];
   async?: ASYNC;
   useFakeTimers?: boolean;
+  initialState?: string;
+  initialContext?: TC;
 };
 
 export type ParallelsWithChildren = {

@@ -27,7 +27,10 @@ export function useMachine<
 
   const id = machine.id;
 
-  const service = interpret(machine).start();
+  const initialC = props.initialContext;
+  const _machine = initialC ? machine.withContext(initialC) : machine;
+
+  const service = interpret(_machine).start(props.initialState);
 
   const sender = async () => {
     if (props.async === true) {
