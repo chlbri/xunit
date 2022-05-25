@@ -64,7 +64,7 @@ export async function testMachine<
     history &&
       it('The history', () => {
         const _history = results();
-        expect(_history).toStrictEqual(history);
+        expect(_history).toEqual(history);
       });
   });
 }

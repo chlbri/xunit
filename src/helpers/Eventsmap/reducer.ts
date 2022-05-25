@@ -9,12 +9,14 @@ export function reducerTarget(transition: Transition, id: string) {
   if (target) {
     const actions = _actions;
     return {
+      ...transition,
       target,
       actions,
     };
   }
   const actions = addActions(testAction(id), _actions);
   return {
+    ...transition,
     actions,
   };
 }
