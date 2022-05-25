@@ -10,6 +10,7 @@ import {
   ServiceMap,
   StateMachine,
   StateSchema,
+  StateValue,
   TypegenDisabled,
   Typestate,
 } from 'xstate';
@@ -49,7 +50,7 @@ export type DeepConfig = Config &
   };
 
 export type History<T> = {
-  currentState: string;
+  currentState: StateValue;
   currentContext: T;
 };
 
@@ -76,7 +77,7 @@ export type TestsProps<
   events?: (ASYNC extends undefined | false ? Event<TE> : Waiter<TE>)[];
   async?: ASYNC;
   useFakeTimers?: boolean;
-  initialState?: string;
+  initialState?: StateValue;
   initialContext?: TC;
 };
 

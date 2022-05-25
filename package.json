@@ -63,8 +63,10 @@
   "dependencies": {
     "@bemedev/fsf": "^0.2.0",
     "@bemedev/types": "^0.0.3",
+    "@types/lodash.clonedeep": "^4.5.7",
     "@xstate/immer": "^0.3.1",
-    "immer": "^9.0.12"
+    "immer": "^9.0.12",
+    "lodash.clonedeep": "^4.5.0"
   },
   "peerDependencies": {
     "jest": "^28.0.3",

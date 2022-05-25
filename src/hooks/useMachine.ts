@@ -1,11 +1,12 @@
+import cloneDeep from 'lodash.clonedeep';
 import {
   BaseActionObject,
-  createMachine,
   EventObject,
   interpret,
   NoInfer,
   ResolveTypegenMeta,
   ServiceMap,
+  StateValue,
   TypegenDisabled,
 } from 'xstate';
 import { DEFAULT_WAIT_BETWEEN_EVENT, TESTS_KEY } from '../constants';
@@ -27,10 +28,15 @@ export function useMachine<
 
   const id = machine.id;
 
-  const initialC = props.initialContext;
-  const _machine = initialC ? machine.withContext(initialC) : machine;
+  const initialContext = props.initialContext;
+  const _machine = initialContext
+    ? machine.withContext(initialContext)
+    : machine;
+  const initialState = props.initialState;
 
-  const service = interpret(_machine).start(props.initialState);
+  const service = interpret(_machine).start(
+    retrieveValue(id, initialState),
+  );
 
   const sender = async () => {
     if (props.async === true) {
@@ -57,20 +63,44 @@ export function useMachine<
     }
   };
 
-  const results = () =>
-    filterParallels(
+  const results = () => {
+    const array1 = cloneDeep(
       (service.state.context as ITestContext<TC>)[TESTS_KEY],
-      parallelsWithChildren,
     );
+
+    if (!!initialContext && !!initialState) {
+      array1?.unshift({
+        currentState: initialState,
+        currentContext: initialContext ?? ({} as any),
+      });
+    } else if (!!initialState) {
+      const { __tests__, ...currentContext } =
+        machine.initialState.context;
+
+      array1?.unshift({
+        currentState: initialState,
+        currentContext,
+      });
+    }
+    return filterParallels(array1, parallelsWithChildren);
+  };
 
   return { sender, results, id } as const;
 }
 
-const mach = createMachine({
-  context: {},
-});
+function concatValue(id: string, value: StateValue) {
+  if (typeof value === 'object') {
+    return {
+      [id]: value,
+    };
+  }
+  return `${id}.${value}`;
+}
 
-useMachine({
-  machine: mach,
-  events: ['TEST'],
-});
+function retrieveValue(id: string, value?: StateValue) {
+  if (typeof value === 'object') {
+    return value[id];
+  }
+  const _value = value;
+  return _value?.replace(id + '.', '');
+}
